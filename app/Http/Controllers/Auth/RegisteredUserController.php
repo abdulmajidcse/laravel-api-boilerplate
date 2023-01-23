@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
@@ -19,7 +18,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response | JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -38,6 +37,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return response()->noContent();
+        return response()->json(['message' => 'Success'], 201);
     }
 }
