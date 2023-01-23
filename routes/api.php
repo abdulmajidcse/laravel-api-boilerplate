@@ -15,9 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__ . '/auth.php';
+Route::prefix('auth')->group(function () {
+    require __DIR__ . '/auth.php';
 
-
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return new UserResource($request->user());
+    Route::middleware('auth:sanctum')->name('auth.')->group(function () {
+        Route::get('/user', function (Request $request) {
+            return new UserResource($request->user());
+        });
+    });
 });
