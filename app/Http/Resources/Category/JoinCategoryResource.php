@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Category;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
-{    
+class JoinCategoryResource extends JsonResource
+{
     /**
      * Transform the resource into an array.
      *
@@ -17,6 +17,9 @@ class RoleResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'slug' => $this->slug,
+            'created_at' => $this->created_at?->format('d M Y'),
+            'updated_at' => $this->updated_at?->format('d M Y'),
         ];
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Category;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +17,11 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at?->format('d M Y'),
+            'slug' => $this->slug,
             'created_at' => $this->created_at?->format('d M Y'),
             'updated_at' => $this->updated_at?->format('d M Y'),
-            'roles' => RoleResource::collection($this->roles),
+            'parent_category' => new JoinCategoryResource($this->parentCategory),
+            'sub_categories' => JoinCategoryResource::collection($this->subCategories),
         ];
     }
 }
