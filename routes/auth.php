@@ -1,13 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
 
 Route::middleware('guest:sanctum')->group(function () {
     Route::post('/register', [RegisteredUserController::class, 'store'])
@@ -33,6 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('verification.send');
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm');
+
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
