@@ -16,17 +16,11 @@ class ConfirmablePasswordController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'current-password'],
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->getMessageBag(), 422);
-        }
-
-        if (!Hash::check($validator->safe()['password'], $request->user()->password)) {
-            return response()->json([
-                'password' => __('auth.password'),
-            ], 422);
         }
 
         return response()->json(['message' => 'Success']);
