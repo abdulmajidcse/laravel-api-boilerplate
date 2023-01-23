@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * The "data" wrapper that should be applied.
@@ -12,7 +12,7 @@ class UserResource extends JsonResource
      * @var string|null
      */
     public static $wrap = null;
-
+    
     /**
      * Transform the resource into an array.
      *
@@ -24,11 +24,6 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at?->format('d M Y'),
-            'created_at' => $this->created_at?->format('d M Y'),
-            'updated_at' => $this->updated_at?->format('d M Y'),
-            'roles' => RoleResource::collection($this->roles),
         ];
     }
 }

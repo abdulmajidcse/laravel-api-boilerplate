@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -33,9 +35,14 @@ class RegisteredUserController extends Controller
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);
 
-        $user = User::create($data);
+        DB::transaction(function () use ($data) {
+            $user = User::create($data);
 
-        event(new Registered($user));
+            $userRole = Role::findOrCreate('user');
+            $user->assignRole($userRole);
+
+            event(new Registered($user));
+        });
 
         return response()->json(['message' => 'Success'], 201);
     }

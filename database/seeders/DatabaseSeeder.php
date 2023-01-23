@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,10 +25,17 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'super_admin@gmail.com',
-            'password' => bcrypt(12345678),
-        ]);
+        DB::transaction(function () {
+            $superAdmin = User::create([
+                'name' => 'Administrator',
+                'email' => 'super_admin@gmail.com',
+                'password' => bcrypt(12345678),
+                'email_verified_at' => now(),
+            ]);
+
+            $superAdminRole = Role::findOrCreate('super admin');
+
+            $superAdmin->assignRole($superAdminRole);
+        });
     }
 }
